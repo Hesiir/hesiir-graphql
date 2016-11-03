@@ -1,11 +1,12 @@
 import * as express from 'express';
 import * as path from 'path';
-import * as graphqlHTTP from 'express-graphql';
+import { graphql } from 'graphql';
 import { maskErrors } from 'graphql-errors';
 import * as morgan from 'morgan';
 import * as chalk from "chalk";
 import * as cors from 'cors';
 import * as favicon from 'serve-favicon';
+import * as bodyParser from 'body-parser';
 import schema from './schema';
 import loaders from './loaders';
 
@@ -28,26 +29,14 @@ let corsOptionsDelegate = function(req, callback){
 
 maskErrors(schema);
 
-graphQLServer.use((req, res, next) => {
-  res.set('Content-Type', 'application/graphql; charset=utf-16');
-  next();
-})
+graphQLServer.use(bodyParser.text({type: 'application/graphql; charset=utf-16'}));
 graphQLServer.use(morgan('combined'));
 graphQLServer.use(favicon(path.join(__dirname, '../env/favicon.svg')));
 graphQLServer.use(cors(corsOptionsDelegate));
-graphQLServer.use(graphqlHTTP(req => {
-  return {
-    context: { loaders },
-    schema,
-    graphiql: true,
-    pretty: true,
-    formatError: error => ({
-      message: error.message,
-      locations: error.locations,
-      stack: error.stack
-    })
-  }
-}));
+graphQLServer.post('graphql', (req, res) => {
+  graphql(schema, req.body)
+    .then(result => res.send(JSON.stringify(result, null, 2)))
+});
 
 graphQLServer.listen(env.port, () => console.log(
   `${chalk.bgGreen(chalk.white(' express '))} Server is start on http://${env.domain}:${env.port}`
