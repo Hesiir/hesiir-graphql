@@ -1,0 +1,5 @@
+{
+  "domain": "graphql.local",
+  "port": 5000,
+  "fetchAPI": "http://localhost:3000" 
+}

@@ -1,0 +1,47 @@
+# 来自canaan商城的数据集合
+type Canaan {
+  # Everyone, everywhere
+  allPeople: [Person]
+  person(id: ID!): Person
+}
+
+# An object with an ID
+interface Node {
+  # The id of the object.
+  id: ID!
+}
+
+# Somebody that you used to know
+type Person implements Node {
+  # The ID of an object
+  id: ID!
+
+  # What you yell at me
+  firstName: String
+
+  # What you yell at me when I've been bad
+  lastName: String
+
+  # A name sandwich
+  fullName: String
+
+  # Where to send junk mail
+  email: String
+
+  # Log in as this
+  username: String
+
+  # People who lent you money
+  friends: [Person]
+}
+
+# 所有数据的根查询
+type Query {
+  canaan: Canaan
+
+  # Fetches an object given its ID
+  node(
+    # The ID of an object
+    id: ID!
+  ): Node
+}
