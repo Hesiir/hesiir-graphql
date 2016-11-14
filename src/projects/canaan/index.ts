@@ -7,17 +7,11 @@ import {
   GraphQLSchema,
   GraphQLString,
 } from 'graphql';
-import {
-  fromGlobalId,
-  globalIdField,
-  nodeDefinitions,
-} from 'graphql-relay';
 
 export const GoodsType = new GraphQLObjectType({
   name: 'Goods',
   description: '商品类型',
   fields: () => ({
-    id: globalIdField('Goods'),
     goodsId: {
       type: GraphQLString,
       resolve: obj => obj['goods_id']
