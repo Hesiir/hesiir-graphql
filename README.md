@@ -1,5 +1,5 @@
 # hesiir-graphql
-hesiir graphql server
+hesiir graphql server [![Build Status](https://travis-ci.org/Hesiir/hesiir-graphql.svg?branch=apollo-graphql-server)](https://travis-ci.org/Hesiir/hesiir-graphql)
 
 # Enviroment
 
