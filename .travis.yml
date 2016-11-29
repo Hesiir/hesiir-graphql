@@ -5,11 +5,10 @@ node_js:
 sudo: required
 cache:
   yarn: true
-install:
-  - yarn
 before_script:
   - yarn global add babel-cli typescript typings
   - typings install
   - tsc ./src/* --outDir ./tsbuild/
+  - yarn
 script:
   - yarn run start
