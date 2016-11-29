@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - "node"
+  - "7"
+  - "6"
+  - "6.1"
+  - "5.11"
+  - "iojs"
+cache:
+  yarn: true
+install:
+  - yarn
+before_script:
+  - yarn global add babel-cli typescript typings
+  - typings install
+  - tsc ./src/* --outDir ./tsbuild/
+script:
+  - yarn run start
