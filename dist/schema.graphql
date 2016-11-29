@@ -1,47 +1,21 @@
-# 来自canaan商城的数据集合
-type Canaan {
-  # Everyone, everywhere
-  allPeople: [Person]
-  person(id: ID!): Person
+schema {
+  query: CanaanQueryType
+  mutation: CanaanMutatuionType
 }
 
-# An object with an ID
-interface Node {
-  # The id of the object.
-  id: ID!
+# 友邻市集的数据提交接口
+type CanaanMutatuionType {
+  GoodsOrder: String
 }
 
-# Somebody that you used to know
-type Person implements Node {
-  # The ID of an object
-  id: ID!
-
-  # What you yell at me
-  firstName: String
-
-  # What you yell at me when I've been bad
-  lastName: String
-
-  # A name sandwich
-  fullName: String
-
-  # Where to send junk mail
-  email: String
-
-  # Log in as this
-  username: String
-
-  # People who lent you money
-  friends: [Person]
+# 友邻市集的数据查询接口
+type CanaanQueryType {
+  goodsList: [Goods]
+  goodsDetail: Goods
+  goodsTest: Goods
 }
 
-# 所有数据的根查询
-type Query {
-  canaan: Canaan
-
-  # Fetches an object given its ID
-  node(
-    # The ID of an object
-    id: ID!
-  ): Node
+# 商品类型
+type Goods {
+  goodsId: String
 }

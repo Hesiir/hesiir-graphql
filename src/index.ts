@@ -10,17 +10,18 @@ import * as chalk from "chalk";
 import * as cors from 'cors';
 import * as favicon from 'serve-favicon';
 import * as bodyParser from 'body-parser';
+import * as jwt from 'express-jwt';
+import * as dotenv from 'dotenv';
 import schema from './schema';
 import loaders from './loaders';
+import proc from './process';
 
+dotenv.config();
 const graphQLServer = express();
-const whiteList = require('../env/whiteList.json');
-const env = require('../env/config.json')
 
-const BASE_URL = env.fetchAPI;
 let corsOptionsDelegate = function(req, callback){
   let corsOptions;
-  if(whiteList.domain.indexOf(req.header('Origin')) !== -1){
+  if(process.env.WHITELIST.split(',').indexOf(req.header('Origin')) !== -1){
     corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
   }else{
     corsOptions = { origin: false }; // disable CORS for this request
@@ -30,22 +31,54 @@ let corsOptionsDelegate = function(req, callback){
   callback(null, corsOptions);
 };
 
-maskErrors(schema);
+// maskErrors(schema);
 
-// graphQLServer.use((req, res, next) => {
-//   res.set('Content-Type', 'application/graphql; charset=utf-16');
-//   next();
-// })
 graphQLServer.use(morgan('combined'));
-graphQLServer.use(favicon(path.join(__dirname, '../env/favicon.svg')));
+graphQLServer.use(favicon('favicon.svg'));
 graphQLServer.use(cors(corsOptionsDelegate));
-graphQLServer.use('/graphql', bodyParser.json(), graphqlExpress({
-  schema: schema
+// let auth = (req, res, next) => {
+//   console.log(req.headers);
+  
+//   const authorization = req.headers['authorization'];
+  
+//   if(authorization) {
+//     proc.canaan.decodeToken(authorization.split('Bearer ')[1], (err, decoded) => {
+//       let auth = decoded;
+//       if(err) auth = {
+//         name: err.name,
+//         message: err.message
+//       };
+//       req['auth'] = auth;
+//       return next();
+//     })
+//   }
+
+//   let token = proc.canaan.Token;
+//   req['auth'] = `Bearer ${token}`;
+//   next();
+// }
+graphQLServer.post(`/${process.env.PROJECT}`, [bodyParser.json()], graphqlExpress(() => {
+  // console.log(auth);
+  
+  return {
+    schema: schema,
+    context: { loaders },
+    rootValue: { auth: {} },
+    formatError: (err) => process.env.DEBUG ? err : err.message
+  }
 }));
 graphQLServer.use('/graphiql', graphiqlExpress({
-  endpointURL: '/graphql',
+  endpointURL: `/${process.env.PROJECT}`,
 }));
+graphQLServer.use(/[^(`${process.env.PROJECT}`|graphiql)]/,(req, res, next) => {
+  res.send({
+    message: "Not Found",
+    documentation_url: "https://graphql.local"
+  })
+  // res.set('Content-Type', 'application/graphql; charset=utf-16');
+  next();
+})
 
-graphQLServer.listen(env.port, () => console.log(
-  `${chalk.bgGreen(chalk.white(' express '))} Server is start on http://${env.domain}:${env.port}`
+graphQLServer.listen(process.env.PORT, () => console.log(
+  `${chalk.bgGreen(chalk.white(' express '))} Server is start on http://${process.env.DOMAIN}:${process.env.PORT}`
 ))
