@@ -10,12 +10,214 @@ type CanaanMutatuionType {
 
 # 友邻市集的数据查询接口
 type CanaanQueryType {
-  goodsList: [Goods]
-  goodsDetail: Goods
-  goodsTest: Goods
+  # 商品分类接口
+  goodsCategory: noArrayCategory
+
+  # 友邻计划接口
+  villagePlan: villagePlan
+
+  # 商品列表接口
+  goodsList(cat: Int): noArrayGoods
+
+  # 商品详情接口
+  goodsDetail(id: Int): Goods
+
+  # 用户信息接口
+  userInfo: UserInfo
+
+  # 管家列表接口
+  stewardList: noArraySteward
+}
+
+# 商品分类类型
+type Category {
+  categoryId: String
+  name: String
+  spell: String
+  isLeaf: String
+  parentId: String
+  itemNum: String
+  order: String
+  children: [Category]
 }
 
 # 商品类型
 type Goods {
+  # 商品ID
   goodsId: String
+
+  # 商品封面图
+  coverImage: String
+
+  # 商品展示图片
+  pictureShow: [String]
+
+  # 商品名称
+  goodsName: String
+
+  # 商品销售名称
+  goodsTitle: String
+
+  # 商品详情
+  introductionText: String
+
+  # 商品图文介绍
+  goodsInfo: [IdKeyValue]
+
+  # 商品最小销售价
+  minPrice: String
+
+  # 商品最大销售价
+  maxPrice: String
+
+  # 商品下架时间
+  offShelveTime: String
+
+  # 是否带阳光社区标签
+  isSSC: String
+
+  # 是否限制购买
+  isLimited: String
+
+  # 在销售商品
+  products: [Products]
+
+  # 商品销售规格
+  productSpec: [IdKeyValue]
+
+  # 商品运费
+  shiping: String
+}
+
+# id-key-value类型
+type IdKeyValue {
+  id: String
+  key: String
+  value: String
+}
+
+# !!relay局限性(relay2有改观) - 跟节点不能是数组
+type noArrayCategory {
+  fields: [Category]
+}
+
+# !!relay局限性(relay2有改观) - 跟节点不能是数组
+type noArrayGoods {
+  fields: [Goods]
+}
+
+# !!relay局限性(relay2有改观) - 跟节点不能是数组
+type noArraySteward {
+  fields: [Steward]
+}
+
+# 商品销售类型
+type Products {
+  # 商品销售ID
+  productId: String
+
+  # 商品销售价格
+  productPrice: String
+
+  # 商品库存
+  stock: String
+
+  # 商品销售规格
+  specs: String
+
+  # 限购数量
+  limitedNum: String
+}
+
+# 管家信息类型
+type Steward {
+  # 管家ID
+  stewardId: Int
+
+  # 管家电话
+  phone: Int
+
+  # 管家名字
+  fullName: Int
+
+  # 管家所在网格编码
+  gridCode: Int
+
+  # 管家所在网格名称
+  gridName: Int
+}
+
+# 用户住址类型
+type UserAddress {
+  # 国家
+  country: Int
+
+  # 省/自治区
+  province: Int
+
+  # 城市/城镇
+  city: Int
+
+  # 区/县
+  district: Int
+
+  # 街道
+  street: String
+
+  # 府/厦/邸
+  budding: Int
+
+  # 房间
+  room: Int
+
+  # 是否注册万科物业房屋
+  isRegistedVanke: Boolean
+}
+
+# 用户详情类型
+type UserInfo {
+  # 用户ID
+  userId: Int
+
+  # 用户名称
+  userName: Int
+
+  # 用户昵称
+  nickName: Int
+
+  # 联系方式
+  contact: [IdKeyValue]
+
+  # 住址
+  address: [UserAddress]
+}
+
+# 友邻计划接口类型
+type villagePlan {
+  # 全国募集金额总计
+  nationalDonationSum: Int
+
+  # 全国募集人数总计
+  nationalDonorSum: Int
+
+  # 全国募集次数总计
+  nationalDonationTimes: Int
+
+  # 项目名称
+  villageName: String
+
+  # 项目募集金额总计
+  villageDonationSum: Int
+
+  # 项目募集人数总计
+  villageDonorSum: Int
+
+  # 项目在全国中的排名
+  villageRanking: Int
+
+  # 项目募集次数总计
+  villageDonationTimes: Int
+
+  # 项目参与地址
+  villagePlanURL: String
 }

@@ -57,7 +57,7 @@ graphQLServer.use(cors(corsOptionsDelegate));
 //   req['auth'] = `Bearer ${token}`;
 //   next();
 // }
-graphQLServer.post(`/${process.env.PROJECT}`, [bodyParser.json()], graphqlExpress(() => {
+graphQLServer.post('/graphql', [bodyParser.json()], graphqlExpress(() => {
   // console.log(auth);
   
   return {
@@ -68,12 +68,12 @@ graphQLServer.post(`/${process.env.PROJECT}`, [bodyParser.json()], graphqlExpres
   }
 }));
 graphQLServer.use('/graphiql', graphiqlExpress({
-  endpointURL: `/${process.env.PROJECT}`,
+  endpointURL: '/graphql',
 }));
-graphQLServer.use(/[^(`${process.env.PROJECT}`|graphiql)]/,(req, res, next) => {
+graphQLServer.use(/[^(graphql|graphiql)]/,(req, res, next) => {
   res.send({
     message: "Not Found",
-    documentation_url: "https://graphql.local"
+    documentation_url: "https://graphql.local/graphiql"
   })
   // res.set('Content-Type', 'application/graphql; charset=utf-16');
   next();

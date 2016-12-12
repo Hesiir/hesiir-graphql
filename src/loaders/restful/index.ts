@@ -5,12 +5,15 @@ import { GraphQLError } from 'graphql/error';
 
 dotenv.config();
 const RESTful = new DataLoader(
-  keys => Promise.all(keys.map(fetchJSONFromRelativeURL))
+  keys => Promise.all(keys.map(fetchJSONFromAbsoluteURL))
 );
 
-function fetchJSONFromRelativeURL(relativeURL:string) {
-  return fetch(`http://test.blackpearl.4009515151.com/interfaces/${relativeURL}`, { credentials: 'include' })
-    .then(res => res.json())
+function fetchJSONFromAbsoluteURL(absoluteURL:string) {
+  return fetch(absoluteURL, { credentials: 'include' })
+    .then(res => {
+      console.log(res.clone().text());
+      return res.json()
+    })
 }
 
 export default RESTful;

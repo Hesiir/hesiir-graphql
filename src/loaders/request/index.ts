@@ -10,13 +10,28 @@ const httpReq = new DataLoader(
 );
 
 function requestJSONFromRelativeURL(relativeURL:string) {
-  return request(`http://test.blackpearl.4009515151.com/interfaces/${relativeURL}`, (err, res, body) => {
-    console.log("====>");
-    
+  return request({
+    url: `http://test.blackpearl.4009515151.com/interfaces/${relativeURL}`,
+    headers: {
+      Authorization: "Bearer KFWzkp6nuGc66BBsC75tRtoVQDkZ7A"
+    }
+  }, (err, res, body) => {
+    if (err) return { error: err };
     console.log(err);
-    console.log(res);
-    console.log(body);
     
+    // 如果需要验证用户登录，则转发重定向的请求
+    if (res.req && res.req.path) request({
+      url: `http://test.4009515151.com${res.req.path.replace(/app\//, '')}`,
+      headers: {
+        Authorization: "Bearer KFWzkp6nuGc66BBsC75tRtoVQDkZ7A"
+      }
+    }, (err, res, body) => {
+      console.log(res);
+      
+      if (err) return { error: err };
+      return res;
+    })
+    return res;
   })
 }
 

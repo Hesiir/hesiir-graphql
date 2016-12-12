@@ -28,8 +28,8 @@
     "whatwg-fetch": "^2.0.1"
   },
   "scripts": {
-    "start": "NODE_ENV=development babel-node ./tsbuild/index.js",
-    "build:schema": "babel-node ./tsbuild/helper/getJSONfromSchema.js",
+    "start": "NODE_ENV=development node ./tsbuild/index.js",
+    "build:schema": "node ./tsbuild/helper/getJSONfromSchema.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

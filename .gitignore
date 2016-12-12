@@ -3,8 +3,10 @@ build
 tsbuild
 node_modules
 .__DLLs
+dist
+mock
 
-# Cruft
+# Cruft 
 .DS_Store
 npm-debug.log
 .idea
